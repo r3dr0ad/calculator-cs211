@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'" />
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 class="visually-hidden">Scientific calculator</h1>
+
+    <div class="phone">
+      <img class="phone-img" src="images/phone.jpg" alt="" />
+      <main class="calc" id="calc" hidden>
+      <section class="screen" aria-label="Display">
+        <div class="screen-top">
+          <button type="button" id="mode" class="mode" aria-label="Angle mode: degrees. Press to switch to radians.">DEG</button>
+        </div>
+        <output id="expr" class="expr" aria-label="Expression"></output>
+        <output id="result" class="result" data-kind="idle" aria-live="polite">0</output>
+      </section>
+
+      <div class="keys">
+        <div class="sci" role="group" aria-label="Scientific functions">
+          <button type="button" class="k-fn" data-insert="sin(">sin</button>
+          <button type="button" class="k-fn" data-insert="cos(">cos</button>
+          <button type="button" class="k-fn" data-insert="tan(">tan</button>
+
+          <button type="button" class="k-fn" data-insert="log(" aria-label="Logarithm base 10">log</button>
+          <button type="button" class="k-fn" data-insert="ln(" aria-label="Natural logarithm">ln</button>
+          <button type="button" class="k-fn" data-insert="√(" aria-label="Square root">√</button>
+
+          <button type="button" class="k-fn" data-insert="^2" aria-label="Square">x²</button>
+          <button type="button" class="k-fn" data-insert="^" aria-label="Power">x<sup>y</sup></button>
+          <button type="button" class="k-fn" data-insert="^(-1)" aria-label="Reciprocal">1/x</button>
+
+          <button type="button" class="k-fn" data-insert="π" aria-label="Pi">π</button>
+          <button type="button" class="k-fn" data-insert="e" aria-label="Euler's number">e</button>
+          <button type="button" class="k-fn" data-insert="!" aria-label="Factorial">n!</button>
+
+          <button type="button" class="k-fn" data-insert="(" aria-label="Open parenthesis">(</button>
+          <button type="button" class="k-fn" data-insert=")" aria-label="Close parenthesis">)</button>
+          <button type="button" class="k-fn" data-insert="%" aria-label="Percent">%</button>
+        </div>
+
+        <div class="pad" role="group" aria-label="Number pad">
+          <button type="button" class="k-fn" data-action="clear" aria-label="Clear all">C</button>
+          <button type="button" class="k-fn" data-action="backspace" aria-label="Delete last">⌫</button>
+          <button type="button" class="k-fn" data-insert="Ans" aria-label="Last answer">Ans</button>
+          <button type="button" class="k-fn" data-insert="÷" aria-label="Divide">÷</button>
+
+          <button type="button" class="k-num" data-insert="7">7</button>
+          <button type="button" class="k-num" data-insert="8">8</button>
+          <button type="button" class="k-num" data-insert="9">9</button>
+          <button type="button" class="k-fn" data-insert="×" aria-label="Multiply">×</button>
+
+          <button type="button" class="k-num" data-insert="4">4</button>
+          <button type="button" class="k-num" data-insert="5">5</button>
+          <button type="button" class="k-num" data-insert="6">6</button>
+          <button type="button" class="k-fn" data-insert="−" aria-label="Subtract">−</button>
+
+          <button type="button" class="k-num" data-insert="1">1</button>
+          <button type="button" class="k-num" data-insert="2">2</button>
+          <button type="button" class="k-num" data-insert="3">3</button>
+          <button type="button" class="k-fn" data-insert="+" aria-label="Add">+</button>
+
+          <button type="button" class="k-num k-zero" data-insert="0">0</button>
+          <button type="button" class="k-num" data-insert="." aria-label="Decimal point">.</button>
+          <button type="button" class="k-eq" data-action="equals" aria-label="Equals">=</button>
+        </div>
+      </div>
+        <button type="button" id="home-btn" class="home-btn" aria-label="Home. Close the calculator and go to the home screen."></button>
+      </main>
+
+      <section class="home" id="home" aria-label="Home screen">
+        <p id="clock-time" class="clock-time"></p>
+        <p id="clock-date" class="clock-date"></p>
+        <div class="apps">
+          <button type="button" id="app-calc" class="app">
+            <img class="app-icon" src="images/calculator-icon.jpg" alt="" />
+            <span>Calculator</span>
+          </button>
+          <button type="button" id="app-profile" class="app">
+            <img class="app-icon" src="images/profile-icon.jpg" alt="" />
+            <span>Profile</span>
+          </button>
+        </div>
+        <div class="home-bar" aria-hidden="true"></div>
+      </section>
+
+      <section class="profile" id="profile" aria-label="Profile" hidden>
+        <div class="profile-head">
+          <img class="avatar" src="images/profile.png" alt="" />
+          <h2 class="profile-name">Justin Clark Mendoza</h2>
+          <p class="profile-role">BSIT-2B</p> <!-- EDIT -->
+        </div>
+        <dl class="profile-list">
+          <div><dt>School</dt><dd>Olivarez College Parañaque</dd></div> <!-- EDIT -->
+          <div><dt>Course</dt><dd>Bachelor of Science in Information Technology</dd></div>
+          <div><dt>Subject</dt><dd>CS211 - Application Development and Emerging Technologies</dd></div>
+          <div><dt>Project</dt><dd>Calculator</dd></div>
+        </dl>
+        <button type="button" id="profile-home" class="home-btn" aria-label="Home. Close the profile and go to the home screen."></button>
+      </section>
+
+
+    </div>
+
+    <script src="calculator.js"></script>
+  </body>
+</html>

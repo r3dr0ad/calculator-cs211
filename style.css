@@ -1,0 +1,493 @@
+/* ==========================================================
+   FONTS (self-hosted, so no visitor data goes to Google)
+   Put the .woff2 files in the fonts/ folder. See README.md.
+   If a file is missing, the fallback fonts below are used.
+   ========================================================== */
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/IBMPlexMono-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("fonts/IBMPlexSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+/* ==========================================================
+   TOKENS
+   Colors: three key groups only, so the eye finds the
+   important keys fast. Amber on near-black is for the screen
+   because it has strong contrast and feels like lab equipment.
+   Spacing: a fixed scale (4, 8, 12, 16, 24).
+   ========================================================== */
+:root {
+  --page: #efeeed;
+  --body: #2a2d31;
+  --body-edge: #3d4147;
+  --screen: #0f1112;
+  --amber: #ffb000;
+  --amber-dim: #b98a1e;
+  --error: #ff8a65;
+
+  --num: #d9d9d4;
+  --num-hover: #ececE7;
+  --num-text: #1c1e21;
+  --num-shadow: #8d8d88;
+
+  --fn: #3a3e44;
+  --fn-hover: #474c53;
+  --fn-text: #e8e8e3;
+  --fn-shadow: #1d1f22;
+
+  --eq: #b84a14;
+  --eq-hover: #cc5819;
+  --eq-text: #ffffff;
+  --eq-shadow: #6e2a0a;
+
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+
+  --radius: 4px;
+  --key-height: 3.25rem; /* 52px, above the 44px touch minimum */
+  --home-h: 2rem; /* space for the home button at the bottom of the screen */
+
+  --font-ui: "IBM Plex Sans", system-ui, "Segoe UI", sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* ==========================================================
+   BASE
+   ========================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--s4);
+  background: var(--page);
+  color: var(--fn-text);
+  font-family: var(--font-ui);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* ==========================================================
+   CALCULATOR BODY
+   ========================================================== */
+/* The phone picture is a square. The screen area is placed with
+   percentages of that square, so it scales with the phone. */
+.phone {
+  position: relative;
+  width: min(100dvh - 2 * var(--s4), 100vw - 2 * var(--s4), 1000px);
+  aspect-ratio: 1;
+}
+
+.phone-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* These 4 numbers are the white screen area of the image.
+   If the calculator does not line up, only change these. */
+.calc,
+.home,
+.profile {
+  position: absolute;
+  left: 31.26%;
+  top: 8.9%;
+  width: 37.84%;
+  height: 81.94%;
+  display: flex;
+  flex-direction: column;
+  padding: 6.5% var(--s2) var(--home-h); /* top clears the camera pill, bottom holds the home button */
+  background: var(--body);
+  border-radius: 12.3% / 5.7%; /* matches the screen corners */
+  overflow: hidden;
+}
+
+/* The camera pill is part of the picture, but the calculator covers it.
+   This draws it again on top. */
+.calc::before,
+.home::before,
+.profile::before {
+  content: "";
+  position: absolute;
+  left: 37.07%;
+  top: 1.58%;
+  width: 24.9%;
+  height: 3.28%;
+  background: #1c1c1a; /* matches the phone frame. Adjust with the color meter */
+  border-radius: 999px;
+}
+
+/* ==========================================================
+   SCREEN
+   ========================================================== */
+.screen {
+  display: grid;
+  gap: var(--s1);
+  padding: var(--s3) var(--s4);
+  margin-bottom: var(--s4);
+  background: var(--screen);
+  border: 1px solid #000;
+  border-radius: var(--radius);
+  font-family: var(--font-num);
+}
+
+.screen-top {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.mode {
+  padding: var(--s1) var(--s2);
+  min-height: 28px;
+  background: transparent;
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  border-radius: var(--radius);
+  font-family: var(--font-num);
+  font-size: 0.8125rem;
+}
+.mode:hover {
+  background: #221b08;
+}
+
+.expr,
+.result {
+  display: block;
+  text-align: right;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.expr::-webkit-scrollbar,
+.result::-webkit-scrollbar {
+  display: none;
+}
+
+.expr {
+  min-height: 1.5rem;
+  color: var(--amber-dim);
+  font-size: 1.125rem;
+}
+
+.result {
+  min-height: 2.75rem;
+  color: var(--amber);
+  font-size: 2.25rem;
+  line-height: 1.2;
+}
+.result[data-long="true"] {
+  font-size: 1.5rem;
+  line-height: 1.8;
+}
+.result[data-kind="preview"] {
+  color: var(--amber-dim);
+}
+.result[data-kind="error"] {
+  color: var(--error);
+  font-size: 1.5rem;
+  line-height: 1.8;
+}
+
+/* ==========================================================
+   KEYS
+   Top block: scientific functions (5 columns, 3 rows).
+   Bottom block: number pad (4 columns, 5 rows).
+   ========================================================== */
+.keys {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 3fr 5fr; /* 3 rows of science keys, 5 rows of pad keys */
+  gap: var(--s2);
+}
+
+.sci,
+.pad {
+  display: grid;
+  gap: var(--s2);
+  min-height: 0;
+}
+.sci {
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+.pad {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+.sci button,
+.pad button {
+  min-width: 0;
+  border: 0;
+  border-radius: var(--radius);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  /* The bottom edge is the key's "height". Pressing removes it. */
+  transition: none;
+}
+
+.k-num {
+  background: var(--num);
+  color: var(--num-text);
+  box-shadow: 0 2px 0 var(--num-shadow);
+}
+.k-num:hover {
+  background: var(--num-hover);
+}
+
+.k-fn {
+  background: var(--fn);
+  color: var(--fn-text);
+  box-shadow: 0 2px 0 var(--fn-shadow);
+}
+.k-fn:hover {
+  background: var(--fn-hover);
+}
+
+.k-eq {
+  background: var(--eq);
+  color: var(--eq-text);
+  box-shadow: 0 2px 0 var(--eq-shadow);
+}
+.k-eq:hover {
+  background: var(--eq-hover);
+}
+
+/* Press: the key moves down 1px, like a real key */
+.sci button:active,
+.pad button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+.k-zero {
+  grid-column: span 2;
+}
+
+sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
+/* ==========================================================
+   HOME BUTTON AND HOME SCREEN
+   The bar at the bottom closes the app. The home screen uses
+   the same screen area as .calc (see CALCULATOR BODY).
+   ========================================================== */
+.home-btn,
+.home-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 45%;
+  height: var(--home-h);
+  transform: translateX(-50%);
+}
+.home-btn {
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.home-btn::after,
+.home-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--s2);
+  height: var(--s1);
+  background: var(--fn-text);
+  border-radius: 999px;
+}
+
+.home {
+  padding-inline: var(--s4);
+  background: var(--screen) url("images/background.jpg") center / cover no-repeat;
+}
+
+.clock-time {
+  position: absolute;
+  top: 2.4%;
+  left: 10%;
+  margin: 0;
+  color: #fff;
+  font-family: -apple-system, "SF Pro Text", var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.clock-date {
+  display: none;
+}
+.status-icons {
+  position: absolute;
+  top: 2.7%;
+  right: 10%;
+  width: 2.25rem;
+  height: auto;
+}
+
+.profile {
+  padding-inline: var(--s4);
+  background: var(--screen);
+  overflow-y: auto;
+  scrollbar-width: none;
+  color: #fff;
+  font-family: -apple-system, "SF Pro Text", var(--font-ui);
+}
+.profile-head {
+  display: grid;
+  justify-items: center;
+  gap: var(--s2);
+  margin-top: var(--s5);
+}
+.avatar {
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--eq);
+  font-family: var(--font-num);
+  font-size: 1.75rem;
+}
+.profile-name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.profile-role {
+  margin: 0;
+  color: var(--amber-dim);
+  font-size: 0.875rem;
+}
+.profile-list {
+  display: grid;
+  gap: 1px;
+  margin: var(--s5) 0 0;
+  background: #2a2d31;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.profile-list div {
+  padding: var(--s3) var(--s4);
+  background: #1c1c1e;
+}
+.profile-list dt {
+  color: #9a9a95;
+  font-size: 0.75rem;
+}
+.profile-list dd {
+  margin: var(--s1) 0 0;
+  font-size: 0.9375rem;
+}
+.app-icon .tile-profile {
+  fill: url(#contacts-bg);
+}
+.app-icon .person {
+  fill: #8e8e93;
+}
+
+.apps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s4);
+  margin-top: var(--s5);
+}
+.app {
+  display: grid;
+  justify-items: stretch;
+  text-align: center;
+  gap: var(--s1);
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font-family: -apple-system, "SF Pro Text", var(--font-ui);
+  font-size: 0.6875rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.app-icon {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 22.5%; /* iPhone icon corner */
+}
+.app-icon .tile {
+  fill: #1c1c1e;
+}
+.app-icon .lcd {
+  fill: var(--amber);
+}
+.app-icon .key {
+  fill: var(--num);
+}
+.app-icon .key-eq {
+  fill: var(--eq);
+}
+
+/* ==========================================================
+   SMALL SCREENS
+   ========================================================== */
+@media (max-width: 420px) {
+  .calc {
+    padding: var(--s3) var(--s3) var(--home-h);
+  }
+  .keys {
+    gap: var(--s2);
+  }
+  .sci,
+  .pad {
+    gap: var(--s1);
+  }
+  .sci button,
+  .pad button {
+    font-size: 0.9375rem;
+  }
+  .result {
+    font-size: 1.875rem;
+  }
+}
